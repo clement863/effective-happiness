@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bombGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff4d4d"/>
+      <stop offset="100%" stop-color="#990000"/>
+    </linearGradient>
+  </defs>
+  <!-- 机身（更宽） -->
+  <polygon points="100,15 70,130 130,130" fill="url(#bombGrad)" stroke="#600" stroke-width="2"/>
+  <!-- 主翼（更大） -->
+  <polygon points="50,80 10,150 70,110" fill="#cc3333" stroke="#600" stroke-width="2"/>
+  <polygon points="150,80 190,150 130,110" fill="#cc3333" stroke="#600" stroke-width="2"/>
+  <!-- 额外炮管 -->
+  <rect x="55" y="60" width="8" height="25" fill="#ffaa00" stroke="#600" stroke-width="1.5" rx="3"/>
+  <rect x="137" y="60" width="8" height="25" fill="#ffaa00" stroke="#600" stroke-width="1.5" rx="3"/>
+  <!-- 尾部大喷口 -->
+  <rect x="85" y="130" width="12" height="25" fill="#ff8800" rx="3"/>
+  <rect x="103" y="130" width="12" height="25" fill="#ff8800" rx="3"/>
+  <!-- 座舱（更锐利） -->
+  <polygon points="100,45 90,65 110,65" fill="#ffcc00" stroke="#600" stroke-width="1.5"/>
+</svg>
