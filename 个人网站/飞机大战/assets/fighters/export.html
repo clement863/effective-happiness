@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>战机 PNG 导出工具</title>
+<style>
+  body { margin:0; min-height:100vh; background:#0b0f1c; color:#cfe9ff; font-family:"Segoe UI", sans-serif; }
+  h1 { text-align:center; font-size:20px; letter-spacing:2px; color:#bffcff; margin:24px 0 6px; }
+  .sub { text-align:center; color:#89a8c8; font-size:13px; margin-bottom:16px; }
+  .toolbar { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:22px; }
+  label { color:#9fc7e8; }
+  select { padding:6px 10px; background:#0b0f1c; color:#cfe9ff; border:1px solid #00e5ff; border-radius:6px; }
+  .row { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; padding:0 20px 40px; }
+  .card { background:#10182b; border:1px solid rgba(0,229,255,.3); border-radius:12px; padding:14px; text-align:center; width:150px; }
+  .prev { width:96px; height:96px; margin:0 auto; border-radius:10px; display:flex; align-items:center; justify-content:center;
+          background: repeating-conic-gradient(#20304d 0 25%, #16213a 0 50%) 0 0/16px 16px; }
+  .prev svg { width:96px; height:96px; }
+  .name { margin-top:10px; font-size:14px; letter-spacing:2px; }
+  .tag { margin-top:2px; font-size:12px; color:#6f8bb0; }
+  button { margin-top:10px; padding:7px 14px; background:linear-gradient(135deg,#00d4ff,#0aa2c0); border:none; border-radius:7px;
+           color:#001; font-weight:bold; cursor:pointer; letter-spacing:1px; }
+  button:hover { filter:brightness(1.1); }
+</style>
+</head>
+<body>
+  <h1>战斗机 PNG 导出工具</h1>
+  <div class="sub">透明背景 · 俯视图 · 一键导出 PNG</div>
+  <div class="toolbar">
+    <label for="size">导出尺寸</label>
+    <select id="size">
+      <option value="64">64 px</option>
+      <option value="96">96 px</option>
+      <option value="128" selected>128 px</option>
+      <option value="256">256 px</option>
+      <option value="512">512 px</option>
+    </select>
+  </div>
+  <div class="row" id="list"></div>
+
+<script>
+const SPRITES = [
+  { key:'default', name:'默认战机', tag:'平衡型 · 属性均衡', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><defs><linearGradient id="defGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0c0c0"/><stop offset="100%" stop-color="#808080"/></linearGradient></defs><polygon points="100,20 80,120 120,120" fill="url(#defGrad)" stroke="#555" stroke-width="2"/><polygon points="60,80 20,140 80,110" fill="#a0a0a0" stroke="#555" stroke-width="2"/><polygon points="140,80 180,140 120,110" fill="#a0a0a0" stroke="#555" stroke-width="2"/><rect x="85" y="120" width="10" height="20" fill="#ff6600" rx="2"/><rect x="105" y="120" width="10" height="20" fill="#ff6600" rx="2"/><ellipse cx="100" cy="55" rx="12" ry="10" fill="#66ccff" stroke="#333" stroke-width="1.5"/></svg>` },
+  { key:'blaster', name:'爆破战机', tag:'攻击型 · 火力强大', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><defs><linearGradient id="bombGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff4d4d"/><stop offset="100%" stop-color="#990000"/></linearGradient></defs><polygon points="100,15 70,130 130,130" fill="url(#bombGrad)" stroke="#600" stroke-width="2"/><polygon points="50,80 10,150 70,110" fill="#cc3333" stroke="#600" stroke-width="2"/><polygon points="150,80 190,150 130,110" fill="#cc3333" stroke="#600" stroke-width="2"/><rect x="55" y="60" width="8" height="25" fill="#ffaa00" stroke="#600" stroke-width="1.5" rx="3"/><rect x="137" y="60" width="8" height="25" fill="#ffaa00" stroke="#600" stroke-width="1.5" rx="3"/><rect x="85" y="130" width="12" height="25" fill="#ff8800" rx="3"/><rect x="103" y="130" width="12" height="25" fill="#ff8800" rx="3"/><polygon points="100,45 90,65 110,65" fill="#ffcc00" stroke="#600" stroke-width="1.5"/></svg>` },
+  { key:'lightning', name:'闪电战机', tag:'速度型 · 移速快', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><defs><linearGradient id="speedGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#66b3ff"/><stop offset="100%" stop-color="#0055aa"/></linearGradient></defs><polygon points="100,10 75,130 125,130" fill="url(#speedGrad)" stroke="#003366" stroke-width="2"/><polygon points="70,90 20,150 80,110" fill="#3399ff" stroke="#003366" stroke-width="2"/><polygon points="130,90 180,150 120,110" fill="#3399ff" stroke="#003366" stroke-width="2"/><polygon points="88,130 80,155 96,140" fill="#3399ff" stroke="#003366" stroke-width="1.5"/><polygon points="112,130 120,155 104,140" fill="#3399ff" stroke="#003366" stroke-width="1.5"/><rect x="92" y="130" width="16" height="15" fill="#00ccff" rx="2"/><ellipse cx="100" cy="50" rx="8" ry="12" fill="#aaddff" stroke="#003366" stroke-width="1.5"/></svg>` },
+  { key:'guardian', name:'守护战机', tag:'防御型 · 生命值高', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><defs><linearGradient id="defendGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#66cc66"/><stop offset="100%" stop-color="#1f7a1f"/></linearGradient></defs><polygon points="100,25 60,125 140,125" fill="url(#defendGrad)" stroke="#004d00" stroke-width="2"/><polygon points="40,85 15,140 55,105" fill="#44aa44" stroke="#004d00" stroke-width="2"/><polygon points="160,85 185,140 145,105" fill="#44aa44" stroke="#004d00" stroke-width="2"/><circle cx="100" cy="70" r="18" fill="none" stroke="#ffff99" stroke-width="3"/><line x1="100" y1="55" x2="100" y2="85" stroke="#ffff99" stroke-width="3"/><line x1="85" y1="70" x2="115" y2="70" stroke="#ffff99" stroke-width="3"/><rect x="80" y="125" width="14" height="20" fill="#ffaa33" rx="2"/><rect x="106" y="125" width="14" height="20" fill="#ffaa33" rx="2"/><rect x="75" y="120" width="50" height="10" fill="#2b7a2b" stroke="#004d00" stroke-width="1.5" rx="3"/><ellipse cx="100" cy="55" rx="14" ry="8" fill="#aaffaa" stroke="#004d00" stroke-width="1.5"/></svg>` },
+];
+
+function render() {
+  const box = document.getElementById('list');
+  SPRITES.forEach((s) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const prev = document.createElement('div');
+    prev.className = 'prev';
+    prev.innerHTML = s.svg;
+    const name = document.createElement('div');
+    name.className = 'name';
+    name.textContent = s.name;
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.textContent = s.tag;
+    const btn = document.createElement('button');
+    btn.textContent = '导出 PNG';
+    btn.onclick = () => exportPng(s);
+    card.appendChild(prev);
+    card.appendChild(name);
+    card.appendChild(tag);
+    card.appendChild(btn);
+    box.appendChild(card);
+  });
+}
+
+function exportPng(s) {
+  const size = parseInt(document.getElementById('size').value, 10);
+  const url = URL.createObjectURL(new Blob([s.svg], { type: 'image/svg+xml' }));
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+    ctx.drawImage(img, 0, 0, size, size);
+    c.toBlob((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'fighter_' + s.key + '_' + size + '.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
+  img.src = url;
+}
+
+render();
+</script>
+</body>
+</html>

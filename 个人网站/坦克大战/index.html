@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>科技坦克大战</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="1280" height="720"></canvas>
+
+  <!-- ============ 主菜单 ============ -->
+  <div class="overlay active" id="menu">
+    <div class="glow" aria-hidden="true"></div>
+    <h1 class="logo">科技坦克<span>大战</span></h1>
+    <p class="logo-sub">NEON TANK BATTLE // 霓虹竞技场</p>
+    <div class="menu-btns">
+      <button class="btn primary" id="btnStart">开 始 游 戏</button>
+      <button class="btn" id="btnControls">操 作 说 明</button>
+      <button class="btn" id="btnSound">音效：开</button>
+    </div>
+    <p class="hint">支持 1~3 人同屏对战 · WASD 移动 / F 射击</p>
+  </div>
+
+  <!-- ============ 操作说明 ============ -->
+  <div class="overlay" id="controls">
+    <h2 class="panel-title">操作说明</h2>
+    <div class="controls-grid">
+      <div class="ctrl-col">
+        <h3><span class="dot p1"></span> 玩家 1</h3>
+        <p>移动 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></p>
+        <p>射击 <kbd>F</kbd>　技能 <kbd>G</kbd></p>
+      </div>
+      <div class="ctrl-col">
+        <h3><span class="dot p2"></span> 玩家 2</h3>
+        <p>移动 <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></p>
+        <p>射击 <kbd>L</kbd>　技能 <kbd>K</kbd></p>
+      </div>
+      <div class="ctrl-col">
+        <h3><span class="dot p3"></span> 玩家 3</h3>
+        <p>移动 <kbd>8</kbd><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd>（小键盘）</p>
+        <p>射击 <kbd>0</kbd>　技能 <kbd>+</kbd></p>
+      </div>
+    </div>
+    <div class="rules">
+      <h3>玩法规则</h3>
+      <ul>
+        <li>移动坦克并射击敌人，命中扣除对方血量。</li>
+        <li>地图随机掉落 <b>增益道具</b>（加速/护盾/连发/冰冻/隐身/回血）。</li>
+        <li>地图随机掉落 <b>限时武器</b>（追踪导弹/激光/散弹/地雷/穿墙弹），持续 15 秒自动消失。</li>
+        <li>单人或双人 vs AI：击败 AI/ BOSS 即胜利；双人/三人对战按击杀或得分判胜负。</li>
+      </ul>
+    </div>
+    <button class="btn" id="btnBack">返 回</button>
+  </div>
+
+  <!-- ============ 模式选择 ============ -->
+  <div class="overlay" id="modeselect">
+    <h2 class="panel-title">选择模式</h2>
+    <div class="mode-grid">
+      <div class="mode-card" data-mode="single">
+        <h3>单人挑战</h3>
+        <p>1 人类 vs 1 AI</p>
+        <span class="tag">击败 AI</span>
+      </div>
+      <div class="mode-card" data-mode="double">
+        <h3>双人对战</h3>
+        <p>2 人类各自为战</p>
+        <span class="tag">先杀 5 次</span>
+      </div>
+      <div class="mode-card" data-mode="triple">
+        <h3>三人混战</h3>
+        <p>3 人类大乱斗</p>
+        <span class="tag">限时比得分</span>
+      </div>
+      <div class="mode-card" data-mode="coop">
+        <h3>双人联手战人机</h3>
+        <p>2 人类 vs AI BOSS</p>
+        <span class="tag">联手击破 BOSS</span>
+      </div>
+    </div>
+    <button class="btn" id="btnBackMode">返 回</button>
+  </div>
+
+  <!-- ============ 地图选择 ============ -->
+  <div class="overlay" id="mapselect">
+    <h2 class="panel-title">选择地图</h2>
+    <div class="map-grid">
+      <div class="map-card" data-map="plain">
+        <h3>平原</h3>
+        <p>基础地形，无特殊机制</p>
+      </div>
+      <div class="map-card" data-map="desert">
+        <h3>沙漠</h3>
+        <p>沙尘暴会推动坦克</p>
+      </div>
+      <div class="map-card" data-map="island">
+        <h3>海岛</h3>
+        <p>水塘阻挡通行</p>
+      </div>
+      <div class="map-card" data-map="volcano">
+        <h3>火山</h3>
+        <p>每5秒全图灼烧</p>
+      </div>
+      <div class="map-card" data-map="jungle">
+        <h3>丛林</h3>
+        <p>更多可破坏障碍</p>
+      </div>
+    </div>
+    <button class="btn" id="btnBackMap">返 回</button>
+  </div>
+
+  <!-- ============ 结算 ============ -->
+  <div class="overlay" id="gameover">
+    <h2 class="result-title" id="resultTitle">胜利！</h2>
+    <p class="result-sub" id="resultSub"></p>
+    <div class="menu-btns">
+      <button class="btn primary" id="btnRestart">再 来 一 局</button>
+      <button class="btn" id="btnMenu">主 菜 单</button>
+    </div>
+  </div>
+</div>
+
+<!-- 依赖加载顺序：config → input → audio → particles → tank → game -->
+<script src="js/config.js"></script>
+<script src="js/input.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/tank.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
