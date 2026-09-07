@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="speedGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#66b3ff"/>
+      <stop offset="100%" stop-color="#0055aa"/>
+    </linearGradient>
+  </defs>
+  <!-- 尖锐机身 -->
+  <polygon points="100,10 75,130 125,130" fill="url(#speedGrad)" stroke="#003366" stroke-width="2"/>
+  <!-- 大后掠翼 -->
+  <polygon points="70,90 20,150 80,110" fill="#3399ff" stroke="#003366" stroke-width="2"/>
+  <polygon points="130,90 180,150 120,110" fill="#3399ff" stroke="#003366" stroke-width="2"/>
+  <!-- 小尾翼 -->
+  <polygon points="88,130 80,155 96,140" fill="#3399ff" stroke="#003366" stroke-width="1.5"/>
+  <polygon points="112,130 120,155 104,140" fill="#3399ff" stroke="#003366" stroke-width="1.5"/>
+  <!-- 单喷口（小） -->
+  <rect x="92" y="130" width="16" height="15" fill="#00ccff" rx="2"/>
+  <!-- 座舱（细长） -->
+  <ellipse cx="100" cy="50" rx="8" ry="12" fill="#aaddff" stroke="#003366" stroke-width="1.5"/>
+</svg>

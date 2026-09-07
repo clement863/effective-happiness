@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="defGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c0c0c0"/>
+      <stop offset="100%" stop-color="#808080"/>
+    </linearGradient>
+  </defs>
+  <!-- 机身 -->
+  <polygon points="100,20 80,120 120,120" fill="url(#defGrad)" stroke="#555" stroke-width="2"/>
+  <!-- 机翼 -->
+  <polygon points="60,80 20,140 80,110" fill="#a0a0a0" stroke="#555" stroke-width="2"/>
+  <polygon points="140,80 180,140 120,110" fill="#a0a0a0" stroke="#555" stroke-width="2"/>
+  <!-- 尾喷 -->
+  <rect x="85" y="120" width="10" height="20" fill="#ff6600" rx="2"/>
+  <rect x="105" y="120" width="10" height="20" fill="#ff6600" rx="2"/>
+  <!-- 座舱 -->
+  <ellipse cx="100" cy="55" rx="12" ry="10" fill="#66ccff" stroke="#333" stroke-width="1.5"/>
+</svg>

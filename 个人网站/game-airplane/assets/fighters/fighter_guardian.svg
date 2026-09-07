@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="defendGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#66cc66"/>
+      <stop offset="100%" stop-color="#1f7a1f"/>
+    </linearGradient>
+  </defs>
+  <!-- 宽厚机身 -->
+  <polygon points="100,25 60,125 140,125" fill="url(#defendGrad)" stroke="#004d00" stroke-width="2"/>
+  <!-- 短粗机翼 -->
+  <polygon points="40,85 15,140 55,105" fill="#44aa44" stroke="#004d00" stroke-width="2"/>
+  <polygon points="160,85 185,140 145,105" fill="#44aa44" stroke="#004d00" stroke-width="2"/>
+  <!-- 护盾标识（十字） -->
+  <circle cx="100" cy="70" r="18" fill="none" stroke="#ffff99" stroke-width="3"/>
+  <line x1="100" y1="55" x2="100" y2="85" stroke="#ffff99" stroke-width="3"/>
+  <line x1="85" y1="70" x2="115" y2="70" stroke="#ffff99" stroke-width="3"/>
+  <!-- 尾部双喷口（带装甲包围） -->
+  <rect x="80" y="125" width="14" height="20" fill="#ffaa33" rx="2"/>
+  <rect x="106" y="125" width="14" height="20" fill="#ffaa33" rx="2"/>
+  <rect x="75" y="120" width="50" height="10" fill="#2b7a2b" stroke="#004d00" stroke-width="1.5" rx="3"/>
+  <!-- 座舱（圆润） -->
+  <ellipse cx="100" cy="55" rx="14" ry="8" fill="#aaffaa" stroke="#004d00" stroke-width="1.5"/>
+</svg>
