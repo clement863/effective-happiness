@@ -496,7 +496,7 @@
             font-weight: 700;
         }
 
-        /* ===== Project Cards ===== */
+        /* ===== Project Cards (左右布局) ===== */
         .project-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -505,24 +505,36 @@
         .project-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 24px;
+            padding: 20px 24px;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
             transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 20px;
+            min-height: 180px;
         }
         .project-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
         }
+        .project-card .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         .project-card .title {
             font-size: 1.1rem;
             font-weight: 700;
+            margin-bottom: 4px;
         }
         .project-card .stack {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin: 8px 0 10px;
+            margin: 6px 0 8px;
         }
         .project-card .stack span {
             background: var(--tag-bg);
@@ -537,9 +549,10 @@
             font-size: 0.9rem;
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         .project-card .desc li {
-            padding: 3px 0 3px 18px;
+            padding: 2px 0 2px 18px;
             position: relative;
         }
         .project-card .desc li::before {
@@ -556,9 +569,32 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.88rem;
+            align-self: flex-start;
         }
         .project-card .link:hover {
             text-decoration: underline;
+        }
+
+        /* 右侧图片区域 */
+        .project-card .project-image {
+            flex: 0 0 180px;
+            width: 180px;
+            height: auto;
+            min-height: 140px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: var(--bg-card-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+        }
+        .project-card .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            max-height: 180px;
         }
 
         /* ===== Accordion Gallery (GSAP 驱动) ===== */
@@ -858,6 +894,14 @@
                 background: #fff !important;
                 transform: none !important;
             }
+            .project-card .project-image {
+                flex: 0 0 120px !important;
+                width: 120px !important;
+                min-height: 80px !important;
+            }
+            .project-card .project-image img {
+                max-height: 120px !important;
+            }
             .hero-tags .tag {
                 background: #f0f0f0 !important;
                 color: #000 !important;
@@ -1003,7 +1047,19 @@
                 font-size: 0.82rem;
             }
             .project-card {
+                flex-direction: column;
                 padding: 18px;
+            }
+            .project-card .project-image {
+                flex: 0 0 auto;
+                width: 100%;
+                height: 160px;
+                min-height: 120px;
+                order: -1;
+            }
+            .project-card .project-image img {
+                max-height: 160px;
+                object-fit: cover;
             }
             .timeline-item {
                 padding-left: 16px;
@@ -1047,6 +1103,9 @@
             }
             .accordion-gallery {
                 height: 280px;
+            }
+            .project-card .project-image {
+                height: 140px;
             }
         }
 
@@ -1251,23 +1310,27 @@
                 },
                 {
                     title: '星际战机 · 飞机大战',
+                    // 图片交换：现在使用 photo6.jpg（原坦克图片）
+                    image: './photo6.jpg',
                     stack: ['Canvas', 'JavaScript', '面向对象', '游戏循环'],
                     details: [
                         '完整的飞行射击游戏，包含敌人生成、Boss 战、道具系统、多难度模式',
                         '支持键盘/鼠标操控，拥有波次管理、升级系统、连击与炸弹机制',
                         '采用纯 Canvas 渲染，无外部依赖，适配移动端触控'
                     ],
-                    link: './game-airplane/index.html'
+                    link: 'https://feijigame.netlify.app'
                 },
                 {
                     title: '科技坦克大战 · 霓虹竞技场',
+                    // 图片交换：现在使用 photo3.jpg（原飞机图片）
+                    image: './photo3.jpg',
                     stack: ['Canvas', 'JavaScript', '多人对战', 'AI 设计'],
                     details: [
                         '支持 1~3 人同屏对战，包含 AI 敌人、多种地图和增益道具系统',
                         '实现坦克移动、射击、技能释放，以及限时武器掉落机制',
                         '提供多种游戏模式（单人挑战、双人对战、三人混战、双人联手战人机）'
                     ],
-                    link: './game-tank/index.html'
+                    link: 'https://tankedazhangame.netlify.app'
                 }
             ],
             gallery: [
@@ -1409,18 +1472,24 @@
             tabs.forEach((t, i) => {
                 const hidden = i === 0 ? 'false' : 'true';
                 const proj = t.content;
+                const imageHtml = proj.image ?
+                    `<div class="project-image"><img src="${proj.image}" alt="${proj.title} 封面"></div>` :
+                    '';
                 panelsHtml += `
                     <div class="tabs-panel" role="tabpanel" id="${t.panel}" aria-labelledby="${t.id}" aria-hidden="${hidden}">
                         <div class="project-grid">
                             <div class="project-card">
-                                <div class="title">${proj.title}</div>
-                                <div class="stack">
-                                    ${proj.stack.map(s => `<span>${s}</span>`).join('')}
+                                <div class="card-content">
+                                    <div class="title">${proj.title}</div>
+                                    <div class="stack">
+                                        ${proj.stack.map(s => `<span>${s}</span>`).join('')}
+                                    </div>
+                                    <ul class="desc">
+                                        ${proj.details.map(d => `<li>${d}</li>`).join('')}
+                                    </ul>
+                                    ${proj.link && proj.link !== '#' ? `<a href="${proj.link}" class="link" target="_blank" rel="noopener">🔗 查看项目 →</a>` : ''}
                                 </div>
-                                <ul class="desc">
-                                    ${proj.details.map(d => `<li>${d}</li>`).join('')}
-                                </ul>
-                                ${proj.link && proj.link !== '#' ? `<a href="${proj.link}" class="link" target="_blank" rel="noopener">🔗 查看项目 →</a>` : ''}
+                                ${imageHtml}
                             </div>
                         </div>
                     </div>
@@ -1464,7 +1533,6 @@
                 return;
             }
 
-            // 配置
             const config = {
                 defaultIndex: 1,
                 expandRatio: 0.52,
@@ -1475,19 +1543,16 @@
                 parallax: 0.5,
                 tilt: 8,
                 stagger: 0.06,
-                trigger: 'click', // 移动端统一 click
+                trigger: 'click',
                 grayscale: true,
                 showLabels: true
             };
 
-            // 判断是否触屏设备，如果是则使用 click，否则 hover+click
             const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             const trigger = isTouch ? 'click' : 'hover';
 
-            // 清空容器
             container.innerHTML = '';
 
-            // 创建面板
             const panels = [];
             const mediaElements = [];
             const barElements = [];
@@ -1501,11 +1566,9 @@
                 panel.setAttribute('aria-label', item.label);
                 panel.dataset.index = idx;
 
-                // frame
                 const frame = document.createElement('span');
                 frame.className = 'ag-panel__frame';
 
-                // media
                 const media = document.createElement('span');
                 media.className = 'ag-panel__media';
                 const img = document.createElement('img');
@@ -1516,7 +1579,6 @@
                 media.appendChild(img);
                 frame.appendChild(media);
 
-                // overlay
                 const overlay = document.createElement('span');
                 overlay.className = 'ag-panel__overlay';
                 overlay.setAttribute('aria-hidden', 'true');
@@ -1524,7 +1586,6 @@
 
                 panel.appendChild(frame);
 
-                // label
                 const label = document.createElement('span');
                 label.className = 'ag-panel__label';
                 label.setAttribute('aria-hidden', 'true');
@@ -1547,16 +1608,13 @@
                 textElements.push(text);
             });
 
-            // 状态
             const count = panels.length;
             let activeIndex = Math.min(Math.max(config.defaultIndex, 0), count - 1);
             let tl = null;
 
-            // 计算扩展系数
             const r = Math.min(Math.max(config.expandRatio, 0.2), 0.9);
             const grow = count > 1 ? (r * (count - 1)) / (1 - r) : 1;
 
-            // 应用布局
             function applyLayout(animate = true) {
                 if (tl) tl.kill();
                 const dur = animate ? config.duration : 0;
@@ -1568,21 +1626,14 @@
                     const bar = barElements[i];
                     const text = textElements[i];
 
-                    // 旋转角度：左侧正转，右侧反转
                     const tiltAngle = config.tilt;
                     const rot = isActive ? 0 : (i < activeIndex ? tiltAngle : -tiltAngle);
 
-                    // 图片偏移（视差）
                     const drift = Math.max(-1.5, Math.min(1.5, activeIndex - i));
-                    const shift = drift * config.parallax * 0.06 * 320; // 近似媒体大小
+                    const shift = drift * config.parallax * 0.06 * 320;
 
-                    // 灰度
                     const gray = config.grayscale ? (isActive ? 0 : 1) : 0;
 
-                    // overlay 变暗程度 (active 为 0.0，其他为 0.35)
-                    const dim = isActive ? 0 : 0.35;
-
-                    // 动画目标
                     const panelTarget = {
                         flexGrow: isActive ? grow : 1,
                         rotateY: rot,
@@ -1591,7 +1642,6 @@
                     };
                     tl.to(panel, panelTarget, 0);
 
-                    // 媒体动画
                     const mediaTarget = {
                         x: isActive ? 0 : shift,
                         y: 0,
@@ -1601,17 +1651,14 @@
                     };
                     tl.to(media, mediaTarget, 0);
 
-                    // overlay dim (通过 opacity 模拟 dim)
                     const overlay = panel.querySelector('.ag-panel__overlay');
                     if (overlay) {
                         const opacityTarget = isActive ? 0.35 : 0.6;
                         tl.to(overlay, { opacity: opacityTarget, duration: dur, ease: config.ease }, 0);
                     }
 
-                    // 标签显示
                     if (config.showLabels) {
                         if (isActive) {
-                            // 显示标签
                             tl.to([bar, text], {
                                 opacity: 1,
                                 x: 0,
@@ -1631,32 +1678,26 @@
                 });
             }
 
-            // 切换激活
             function setActive(index) {
                 if (index === activeIndex) return;
                 activeIndex = index;
                 applyLayout(true);
-                // 更新 aria-current
                 panels.forEach((p, i) => {
                     p.setAttribute('aria-current', i === activeIndex ? 'true' : 'false');
                 });
             }
 
-            // 绑定事件
             panels.forEach((panel, idx) => {
-                // 点击
                 panel.addEventListener('click', (e) => {
                     setActive(idx);
                 });
 
-                // 悬停 (仅非触屏)
                 if (!isTouch) {
                     panel.addEventListener('mouseenter', () => {
                         if (trigger === 'hover') setActive(idx);
                     });
                 }
 
-                // 键盘
                 panel.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -1675,9 +1716,7 @@
                 });
             });
 
-            // 初始布局（无动画）
             applyLayout(false);
-            // 标记当前激活
             panels.forEach((p, i) => {
                 p.setAttribute('aria-current', i === activeIndex ? 'true' : 'false');
             });
@@ -1818,7 +1857,6 @@
             const canvas = document.getElementById('pbCanvas');
             if (!canvas) return;
 
-            // 着色器源码（与之前相同）
             const vertexShader = `
                 void main() {
                     gl_Position = vec4(position, 1.0);
@@ -1994,7 +2032,7 @@
                 rippleThickness: 0.1,
                 rippleIntensity: 1.0,
                 edgeFade: 0.25,
-                shapeType: 1 // circle
+                shapeType: 1
             };
 
             function getColor(theme) {
